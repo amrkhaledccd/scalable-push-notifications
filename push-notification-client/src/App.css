@@ -95,7 +95,7 @@ body {
   border-bottom-color: transparent;
 }
 
-@media (max-width: 767px) {
+/* @media (max-width: 767px) {
   .barsMenu {
     display: inline-block;
   }
@@ -113,7 +113,7 @@ body {
   .logo a {
     padding: 10px 20px;
   }
-}
+} */
 
 .ant-badge {
   font-size: inherit;
