@@ -1,6 +1,6 @@
 package com.test.pushnotification.service;
 
-import com.test.pushnotification.payload.NotificationPayload;
+import com.test.pushnotification.model.Notification;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
@@ -22,15 +22,14 @@ public class EmitterService {
     }
 
     public void pushNotification(String username, String name, String message) {
-        log.info("pushing {} notification for user");
+        log.info("pushing {} notification for user {}", message, username);
         List<SseEmitter> deadEmitters = new ArrayList<>();
 
-        NotificationPayload payload =
-                NotificationPayload
-                        .builder()
-                        .name(name)
-                        .msg(message)
-                        .build();
+        Notification payload = Notification
+                .builder()
+                .from(name)
+                .message(message)
+                .build();
 
         emitters.forEach(emitter -> {
             try {

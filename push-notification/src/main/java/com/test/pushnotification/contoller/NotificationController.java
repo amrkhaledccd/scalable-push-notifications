@@ -24,13 +24,13 @@ public class NotificationController {
         SseEmitter sseEmitter = new SseEmitter(24 * 60 * 60 * 1000l);
         emitterService.addEmitter(sseEmitter);
 
+        log.info("subscribed");
         return sseEmitter;
     }
 
     @PostMapping("/notification/{username}")
     public ResponseEntity<?> send(@PathVariable String username, @RequestBody NotificationRequest request) {
-
-        emitterService.pushNotification(username, request.getName(), request.getMessage());
+        emitterService.pushNotification(username, request.getFrom(), request.getMessage());
         return ResponseEntity.ok().body("message pushed to user " + username);
     }
 }
