@@ -2,6 +2,8 @@ package com.test.pushnotification.contoller;
 
 
 import com.test.pushnotification.payload.NotificationRequest;
+import com.test.pushnotification.payload.RedisNotificationPayload;
+import com.test.pushnotification.redis.RedisMessagePublisher;
 import com.test.pushnotification.service.EmitterService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,9 @@ public class NotificationController {
     @Autowired
     private EmitterService emitterService;
 
+    @Autowired
+    private RedisMessagePublisher redisMessagePublisher;
+
     @GetMapping("/subscription")
     public SseEmitter subsribe() {
         log.info("subscribing...");
@@ -30,7 +35,10 @@ public class NotificationController {
 
     @PostMapping("/notification/{username}")
     public ResponseEntity<?> send(@PathVariable String username, @RequestBody NotificationRequest request) {
-        emitterService.pushNotification(username, request.getFrom(), request.getMessage());
+
+        redisMessagePublisher.publish(
+                new RedisNotificationPayload(username, request.getFrom(), request.getMessage()));
+
         return ResponseEntity.ok().body("message pushed to user " + username);
     }
 }
